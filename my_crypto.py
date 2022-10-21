@@ -30,7 +30,9 @@ def bin_list_to_string(bin_message: list) -> str:
 
     output_string = ""
     for bin_char in bin_message:
+
         binary_int = int(bin_char, 2)
+        # print(bin_char, binary_int, chr(binary_int))
         output_string += chr(binary_int)
     return output_string
 
