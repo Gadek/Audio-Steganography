@@ -27,7 +27,6 @@ def hide_data(data, bin_ciphertext, random_locations_key, last_bits, channels):
         sign = -1 if val<0 else 1
         bin_val = bin(val)[2:].strip('b')
         new_bin_val = set_LSB(bin_val, bits)
-        # print(new_bin_val, bits,bin_val)
         new_val = int(new_bin_val,2)*sign
         # print(bin_val,bits,new_bin_val)
         flatten_list[location] = new_val
