@@ -3,13 +3,6 @@ from tkinter import filedialog as fd
 from write import write_to_file
 from read import read_from_file
 import tkinter.scrolledtext as tkscrolled
-filename_path_source= ""
-filename_path_destination= ""
-
-window = tk.Tk()
-window.geometry("700x800")
-window.title('Hide a message')
-window.resizable(False, False)
 
 def _type(key):
     print(io_text.get('1.0', 'end'))
@@ -38,6 +31,15 @@ def open_file(arg):
         filename_path_destination = fd.askopenfilename()
         file_path_text_destination.config(text=filename_path_destination)
 
+filename_path_source= ""
+filename_path_destination= ""
+
+window = tk.Tk()
+window.geometry("700x800")
+window.title('Hide a message')
+window.resizable(False, False)
+
+
 desition = tk.IntVar()
 option1 = tk.Radiobutton(window, text="hide", variable=desition, value=0, command=lambda: option("hide text"))
 option1.pack( anchor = tk.N )
@@ -56,7 +58,7 @@ length_label = tk.Label(master=left_frame)
 length_label.config(text="Length of message")
 length_label.pack(anchor = tk.W)
 
-io_text = tkscrolled.ScrolledText(master=left_frame, height=12, width=35)
+io_text = tkscrolled.ScrolledText(master=left_frame, height=5, width=35)
 io_text.pack(anchor = tk.W, expand=tk.YES, fill=tk.BOTH, pady=(0, 10))
 io_text.bind("<Button>", lambda event, arg=(0): length_label.config(text=len(io_text.get('1.0', 'end'))-1))
 
