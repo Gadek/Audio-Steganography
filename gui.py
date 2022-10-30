@@ -157,7 +157,7 @@ open_file_btn_reveal_from = tk.Button(master=left_frame, text="Open a source fil
 
 button = tk.Button(
     master=left_frame,
-    text="reveal text",
+    text="hide text",
     width=15,
     height=2,
     bg="blue",
