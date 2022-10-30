@@ -19,9 +19,16 @@ def _type(key):
 def option(args):
     io_label.config(text=args)
     button.config(text=args)
+    io_text.delete("1.0", "end")
 
     if args == "hide text":
+        io_label.pack_forget()
+        io_label.pack(anchor = tk.W, before=label)
+        
         length_label.pack(anchor = tk.W, after=io_label)
+        
+        io_text.pack_forget()
+        io_text.pack(anchor = tk.W, expand=tk.YES, fill=tk.BOTH, pady=(0, 10), after=length_label)
 
         set_length_label.pack_forget()
         secret_length.pack_forget()
@@ -33,7 +40,14 @@ def option(args):
         file_path_text_reveal_from.pack_forget()
         open_file_btn_reveal_from.pack_forget()
     elif args == "reveal text":
+        io_label.pack_forget()
+        io_label.pack(anchor = tk.W)
+
         length_label.pack_forget()
+
+        io_text.pack_forget()
+        io_text.pack(anchor = tk.W, expand=tk.YES, fill=tk.BOTH, pady=(0, 10), after=io_label)
+
 
         set_length_label.pack( anchor = tk.W, after=seed )
         secret_length.pack( anchor = tk.W, pady=(0,10), after=set_length_label )
@@ -49,7 +63,7 @@ def hide_or_reveal(desition):
     if desition.get()==0: #hide
         write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), int(cryptokey.get()), io_text.get('1.0', 'end'), int(seed.get()))
     else:
-        message = read_from_file(filename_path_source, int(LSB.get()), int(cryptokey.get()), int(seed.get()), int(secret_length.get()))
+        message = read_from_file(filename_path_reveal_from, int(LSB.get()), int(cryptokey.get()), int(seed.get()), int(secret_length.get()))
         io_text.delete("1.0", "end")
         io_text.insert(tk.END, message)
 
