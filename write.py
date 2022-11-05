@@ -2,6 +2,7 @@ from scipy.io import wavfile
 import sys
 from my_crypto import *
 from utils import *
+from padding import gen_padding
 import random
 
 def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
@@ -13,16 +14,7 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
     print("secret", secret)
     print()
 
-    b = (len(secret) * 7) % last_bits
-    # print(b)
-    j = 0
-    for i in range(0, 100):
-        if (last_bits * i - b) % 7 == 0:
-            j = i
-            break
-
-    x = int((last_bits * j - b) / 7)
-    padding = "@" * x
+    padding = gen_padding(len(secret), last_bits)
     padded_secret = secret + padding
     # print(len(padded_secret) % 7)
 

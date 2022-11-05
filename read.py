@@ -2,9 +2,13 @@ from scipy.io import wavfile
 import sys
 from my_crypto import *
 from utils import *
+from padding import gen_padding
 import random
 
 def read_from_file(path, last_bits, cipher_key, seed, secret_length):
+    # secret_length might be longer because of padding
+    secret_length += len(gen_padding(secret_length, last_bits))
+
     samplerate, stego_data_revealed = wavfile.read(path)
     try:
         channels = stego_data_revealed.shape[1]

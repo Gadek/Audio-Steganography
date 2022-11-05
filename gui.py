@@ -132,7 +132,7 @@ seed = tk.Spinbox(left_frame, from_=1, to=999)
 seed.pack( anchor = tk.W, pady=(0,10) )
 
 set_length_label = tk.Label(left_frame)
-set_length_label.config(text="Set length of hidden text (try with one more or one less if doesnt work)")
+set_length_label.config(text="Set length of hidden text")
 
 secret_length = tk.Spinbox(left_frame, from_=1, to=1000000)
 
