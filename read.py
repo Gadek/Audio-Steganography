@@ -1,9 +1,13 @@
 from scipy.io import wavfile
 from my_crypto import *
 from utils import *
+from padding import gen_padding
 import random
 
 def read_from_file(path, last_bits, cipher_key, seed, secret_length):
+    # secret_length might be longer because of padding
+    secret_length += len(gen_padding(secret_length, last_bits))
+
     samplerate, stego_data_revealed = wavfile.read(path)
     try:
         channels = stego_data_revealed.shape[1]
@@ -26,10 +30,9 @@ def read_from_file(path, last_bits, cipher_key, seed, secret_length):
 
     # Decrypt message
     bin_plaintext = decrypt_bin_message(int(cipher_key), revealed_data)
+
     # Convert message to string
     string_message = bin_list_to_string(bin_plaintext)
+    
     print(string_message)
     return string_message
-
-
-
