@@ -102,24 +102,26 @@ def hide_or_reveal(desition):
     if desition.get()==0: #hide
         write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), int(cryptokey.get()), io_text.get('1.0', 'end'), int(seed.get()))
         plot(filename_path_destination, "after")
+        secret_length_var.set(len(io_text.get('1.0', 'end'))-1)
     else:
         message = read_from_file(filename_path_reveal_from, int(LSB.get()), int(cryptokey.get()), int(seed.get()), int(secret_length.get()))
         io_text.delete("1.0", "end")
         io_text.insert(tk.END, message)
 
 def open_file(arg):
+    global filename_path_reveal_from
+    global filename_path_destination
+    global filename_path_source
     if arg == "source":
-        global filename_path_source
         filename_path_source = fd.askopenfilename()
         file_path_text_source.config(text=filename_path_source)
         plot(filename_path_source, "before")
     elif arg == "destination":
-        global filename_path_destination
         filename_path_destination = fd.askopenfilename()
         file_path_text_destination.config(text=filename_path_destination)
-
+        filename_path_reveal_from = filename_path_destination
+        file_path_text_reveal_from.config(text=filename_path_reveal_from)
     elif arg == "reveal_from":
-        global filename_path_reveal_from
         filename_path_reveal_from = fd.askopenfilename()
         file_path_text_reveal_from.config(text=filename_path_reveal_from)
 
@@ -178,8 +180,9 @@ seed.pack( anchor = tk.W, pady=(0,10) )
 
 set_length_label = tk.Label(left_frame)
 set_length_label.config(text="Set length of hidden text")
-
-secret_length = tk.Spinbox(left_frame, from_=1, to=1000000)
+secret_length_var = tk.StringVar(window)
+secret_length_var.set("1")
+secret_length = tk.Spinbox(left_frame, from_=1, to=1000000, textvariable=secret_length_var)
 
 file_path_text_source = tk.Label(master=left_frame)
 file_path_text_source.config(text="Choose a source .wav file")
@@ -219,14 +222,6 @@ button.pack( anchor = tk.W )
 fig_before = Figure(figsize=(7, 3),
                     dpi=110)
 
-# list of squares
-y = [0 for i in range(100)]
-
-# adding the subplot
-plot1 = fig_before.add_subplot(111)
-
-# plotting the graph
-plot1.plot(y)
 plot_before = tk.Frame(window)
 plot_before.pack()
 canvas_before = FigureCanvasTkAgg(fig_before, master=plot_before)
@@ -248,13 +243,7 @@ fig_after = Figure(figsize=(7, 3),
                  dpi=110)
 plot_after = tk.Frame(window)
 plot_after.pack()
-y2 = [0 for i in range(100)]
 
-# adding the subplot
-plot2 = fig_after.add_subplot(111)
-
-# plotting the graph
-plot2.plot(y2)
 canvas_after = FigureCanvasTkAgg(fig_after,master=plot_after)
 canvas_after.draw()
 
