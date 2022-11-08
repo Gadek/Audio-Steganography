@@ -4,6 +4,8 @@ from my_crypto import *
 from utils import *
 from padding import gen_padding
 import random
+import tkinter as tk
+
 
 def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
     print("path_src", path_src)
@@ -22,8 +24,10 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
     illegal_chars = find_illegal_chars(padded_secret)
 
     if len(illegal_chars) > 0:
-        print("Error: Illegal characters:", ", ".join(illegal_chars), file=sys.stderr)
-        exit(1)
+        message = "Error: Illegal characters: {}".format(", ".join(illegal_chars))
+        print(message, file=sys.stderr)
+        tk.messagebox.showwarning(title=None, message=message)
+        # exit(1)
 
     # path_src = "C:\\Users\\rados\\Desktop\\udost\\audio-steganography\\sinwave1.wav"
     samplerate, data = wavfile.read(path_src)
@@ -48,8 +52,10 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
 
     # Check if provided wave file can store our secret message
     if frames * channels * last_bits < len(padded_secret) * 7:
-        print("Error: Secret is too long", file=sys.stderr)
-        exit(1)
+        message = "Error: Secret is too long"
+        print(message, file=sys.stderr)
+        tk.messagebox.showwarning(title=None, message=message)
+        # exit(1)
 
     bin_message = string_to_bin_list(padded_secret)
     bin_ciphertext = encrypt_bin_message(cipher_key, bin_message)
