@@ -2,15 +2,49 @@ import tkinter as tk
 from tkinter import filedialog as fd
 from write import write_to_file
 from read import read_from_file
+import scipy.io.wavfile as wavfile
 import tkinter.scrolledtext as tkscrolled
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
+                                               NavigationToolbar2Tk)
+
 filename_path_source= ""
 filename_path_destination= ""
 filename_path_reveal_from= ""
 
 window = tk.Tk()
-window.geometry("700x900")
+window.geometry("1100x900")
 window.title('Hide a message')
 window.resizable(False, False)
+
+
+def plot(path, which):
+    # the figure that will contain the plot
+
+
+    if which == "before":
+        samplerate, y = wavfile.read(path)
+
+        # adding the subplot
+        fig_before.clear()
+        plot1 = fig_before.add_subplot(111)
+
+        # plotting the graph
+        plot1.plot(y)
+        canvas_before.draw()
+
+    else:
+        samplerate, y = wavfile.read(path)
+
+        # adding the subplot
+        fig_after.clear()
+        plot2 = fig_after.add_subplot(111)
+        # y=[i for i in range(1000)]
+        # plotting the graph
+        plot2.plot(y)
+        canvas_after.draw()
+
+
 
 def _type(key):
     print(io_text.get('1.0', 'end'))
@@ -39,6 +73,8 @@ def option(args):
         open_file_btn_destination.pack( anchor = tk.W, pady=(0,10), after=file_path_text_destination)
         file_path_text_reveal_from.pack_forget()
         open_file_btn_reveal_from.pack_forget()
+        plot_before.pack()
+        plot_after.pack()
     elif args == "reveal text":
         io_label.pack_forget()
         io_label.pack(anchor = tk.W)
@@ -59,9 +95,13 @@ def option(args):
         file_path_text_reveal_from.pack(anchor=tk.W, after=secret_length)
         open_file_btn_reveal_from.pack( anchor = tk.W, pady=(0,10), after=file_path_text_reveal_from)
 
+        plot_before.pack_forget()
+        plot_after.pack_forget()
+
 def hide_or_reveal(desition):
     if desition.get()==0: #hide
         write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), int(cryptokey.get()), io_text.get('1.0', 'end'), int(seed.get()))
+        plot(filename_path_destination, "after")
     else:
         message = read_from_file(filename_path_reveal_from, int(LSB.get()), int(cryptokey.get()), int(seed.get()), int(secret_length.get()))
         io_text.delete("1.0", "end")
@@ -72,14 +112,17 @@ def open_file(arg):
         global filename_path_source
         filename_path_source = fd.askopenfilename()
         file_path_text_source.config(text=filename_path_source)
+        plot(filename_path_source, "before")
     elif arg == "destination":
         global filename_path_destination
         filename_path_destination = fd.askopenfilename()
         file_path_text_destination.config(text=filename_path_destination)
+
     elif arg == "reveal_from":
         global filename_path_reveal_from
         filename_path_reveal_from = fd.askopenfilename()
         file_path_text_reveal_from.config(text=filename_path_reveal_from)
+
 
 desition = tk.IntVar()
 option1 = tk.Radiobutton(window, text="hide", variable=desition, value=0, command=lambda: option("hide text"))
@@ -115,7 +158,9 @@ R2.pack( anchor = tk.W )
 R3 = tk.Radiobutton(left_frame, text="3", variable=LSB, value=3)
 R3.pack( anchor = tk.W )
 R4 = tk.Radiobutton(left_frame, text="4", variable=LSB, value=4)
-R4.pack( anchor = tk.W, pady=(0,10) )
+R4.pack( anchor = tk.W )
+R5 = tk.Radiobutton(left_frame, text="5", variable=LSB, value=5)
+R5.pack( anchor = tk.W, pady=(0,10) )
 
 cryptokey_label = tk.Label(left_frame)
 cryptokey_label.config(text="Set cryptographic key from 0 to 6")
@@ -166,4 +211,58 @@ button = tk.Button(
 )
 
 button.pack( anchor = tk.W )
+
+
+# plot function is created for
+# plotting the graph in
+# tkinter window
+fig_before = Figure(figsize=(7, 3),
+                    dpi=110)
+
+# list of squares
+y = [0 for i in range(100)]
+
+# adding the subplot
+plot1 = fig_before.add_subplot(111)
+
+# plotting the graph
+plot1.plot(y)
+plot_before = tk.Frame(window)
+plot_before.pack()
+canvas_before = FigureCanvasTkAgg(fig_before, master=plot_before)
+canvas_before.draw()
+
+# placing the canvas on the Tkinter window
+canvas_before.get_tk_widget().pack()
+
+# creating the Matplotlib toolbar
+toolbar_before = NavigationToolbar2Tk(canvas_before,
+                               plot_before)
+toolbar_before.update()
+
+# placing the toolbar on the Tkinter window
+canvas_before.get_tk_widget().pack()
+
+
+fig_after = Figure(figsize=(7, 3),
+                 dpi=110)
+plot_after = tk.Frame(window)
+plot_after.pack()
+y2 = [0 for i in range(100)]
+
+# adding the subplot
+plot2 = fig_after.add_subplot(111)
+
+# plotting the graph
+plot2.plot(y2)
+canvas_after = FigureCanvasTkAgg(fig_after,master=plot_after)
+canvas_after.draw()
+
+# creating the Matplotlib toolbar
+toolbar_after = NavigationToolbar2Tk(canvas_after,
+                               plot_after)
+toolbar_after.update()
+
+# placing the canvas on the Tkinter window
+canvas_after.get_tk_widget().pack()
 window.mainloop()
