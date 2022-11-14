@@ -113,16 +113,31 @@ def open_file(arg):
     global filename_path_destination
     global filename_path_source
     if arg == "source":
-        filename_path_source = fd.askopenfilename()
+        filename_path_source = fd.askopenfilename(
+            filetypes=(
+                ("wav files","*.wav"),
+                ("all files","*.*")
+            )
+        )
         file_path_text_source.config(text=filename_path_source)
         plot(filename_path_source, "before")
     elif arg == "destination":
-        filename_path_destination = fd.askopenfilename()
+        filename_path_destination = fd.askopenfilename(
+            filetypes=(
+                ("wav files","*.wav"),
+                ("all files","*.*")
+            )
+        )
         file_path_text_destination.config(text=filename_path_destination)
         filename_path_reveal_from = filename_path_destination
         file_path_text_reveal_from.config(text=filename_path_reveal_from)
     elif arg == "reveal_from":
-        filename_path_reveal_from = fd.askopenfilename()
+        filename_path_reveal_from = fd.askopenfilename(
+            filetypes=(
+                ("wav files","*.wav"),
+                ("all files","*.*")
+            )
+        )
         file_path_text_reveal_from.config(text=filename_path_reveal_from)
 
 
