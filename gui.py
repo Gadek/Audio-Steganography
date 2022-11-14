@@ -100,9 +100,10 @@ def option(args):
 
 def hide_or_reveal(desition):
     if desition.get()==0: #hide
-        write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), int(cryptokey.get()), io_text.get('1.0', 'end'), int(seed.get()))
+        message = io_text.get('1.0', 'end')[:-1]
+        write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), int(cryptokey.get()), message, int(seed.get()))
         plot(filename_path_destination, "after")
-        secret_length_var.set(len(io_text.get('1.0', 'end')))
+        secret_length_var.set(len(io_text.get('1.0', 'end'))-1)
     else:
         message = read_from_file(filename_path_reveal_from, int(LSB.get()), int(cryptokey.get()), int(seed.get()), int(secret_length.get()))
         io_text.delete("1.0", "end")
@@ -161,7 +162,7 @@ length_label.pack(anchor = tk.W)
 
 io_text = tkscrolled.ScrolledText(master=left_frame, height=12, width=35)
 io_text.pack(anchor = tk.W, expand=tk.YES, fill=tk.BOTH, pady=(0, 10))
-io_text.bind("<Button>", lambda event, arg=(0): length_label.config(text=len(io_text.get('1.0', 'end'))))
+io_text.bind("<Button>", lambda event, arg=(0): length_label.config(text=len(io_text.get('1.0', 'end'))-1))
 
 label = tk.Label(left_frame)
 label.config(text="Number of LSB used")
