@@ -4,7 +4,7 @@ def string_to_bin_list(text: str) -> list:
     # [113, 119, 101, 114, 116]
     ascii_message = [ord(a) for a in text]
     # ['1110001', '1110111', '1100101', '1110010', '1110100']
-    bin_ascii_message = [f'{bin(ascii_char)[2:]:0>7}' for ascii_char in ascii_message]
+    bin_ascii_message = [f'{bin(ascii_char)[2:]:0>8}' for ascii_char in ascii_message]
     return bin_ascii_message
 
 
@@ -18,7 +18,7 @@ def encrypt_bin_message(key, bin_plaintext: list) -> list:
 
 
 def decrypt_bin_message(key, ciphertext: list) -> list:
-    decypher_key = 7-key
+    decypher_key = 8-key
     plaintext = []
     for bin_char in ciphertext:
         plaintext.append(bin_char[decypher_key:]+bin_char[:decypher_key])

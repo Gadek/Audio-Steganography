@@ -18,7 +18,7 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
 
     padding = gen_padding(len(secret), last_bits)
     padded_secret = secret + padding
-    # print(len(padded_secret) % 7)
+    # print(len(padded_secret) % 8)
 
     # Check if secret message has illegal characters
     illegal_chars = find_illegal_chars(padded_secret)
@@ -51,7 +51,7 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
     print(f"length = {length}s")
 
     # Check if provided wave file can store our secret message
-    if frames * channels * last_bits < len(padded_secret) * 7:
+    if frames * channels * last_bits < len(padded_secret) * 8:
         message = "Error: Secret is too long"
         print(message, file=sys.stderr)
         tk.messagebox.showwarning(title=None, message=message)
@@ -59,9 +59,10 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
 
     bin_message = string_to_bin_list(padded_secret)
     bin_ciphertext = encrypt_bin_message(cipher_key, bin_message)
+    print("bin_ciphertext", bin_ciphertext)
 
     random.seed(seed)
-    random_locations_key = sorted(random.sample(range(0, frames * channels), int(len(padded_secret) * 7 / last_bits)))
+    random_locations_key = sorted(random.sample(range(0, frames * channels), int(len(padded_secret) * 8 / last_bits)))
     # print("random_locations_key", random_locations_key)
     multiplier_key = 100000
     stego_data = hide_data(data, bin_ciphertext, random_locations_key, last_bits, channels)

@@ -7,7 +7,7 @@ def set_LSB(value: str, bits: str) -> str:
 
 def find_illegal_chars(text) -> list:
     ascii_message = [ord(a) for a in text]
-    illegal_chars = [chr(ascii_char) for ascii_char in ascii_message if len(bin(ascii_char)[2:]) > 7]
+    illegal_chars = [chr(ascii_char) for ascii_char in ascii_message if len(bin(ascii_char)[2:]) > 8]
     return illegal_chars
 
 def ciphertext_ready(bin_ciphertext, last_bits):
@@ -44,9 +44,9 @@ def reveal_data(data, random_locations_key, last_bits):
         output_string += string_val_bin[len(string_val_bin)-last_bits:]
         # print("string_val_bin[len(string_val_bin)-last_bits:]:", string_val_bin[len(string_val_bin)-last_bits:])
 
-    for i in range(0,len(output_string),7):
-        output_list.append(output_string[i:i+7])
-        # print(output_string[i:i+7])
+    for i in range(0,len(output_string),8):
+        output_list.append(output_string[i:i+8])
+        # print(output_string[i:i+8])
 
     return output_list
 
