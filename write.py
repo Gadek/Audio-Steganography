@@ -6,6 +6,8 @@ from padding import gen_padding
 import random
 import tkinter as tk
 
+import aes
+
 
 def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
     print("path_src", path_src)
@@ -28,6 +30,8 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
         print(message, file=sys.stderr)
         tk.messagebox.showwarning(title=None, message=message)
         # exit(1)
+    
+    padded_secret = aes.encrypt(padded_secret, "AES strong key 123 !@#")
 
     # path_src = "C:\\Users\\rados\\Desktop\\udost\\audio-steganography\\sinwave1.wav"
     samplerate, data = wavfile.read(path_src)

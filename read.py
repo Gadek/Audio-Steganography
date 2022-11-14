@@ -4,9 +4,19 @@ from utils import *
 from padding import gen_padding
 import random
 
+import aes
+
 def read_from_file(path, last_bits, cipher_key, seed, secret_length):
     # secret_length might be longer because of padding
     secret_length += len(gen_padding(secret_length, last_bits))
+
+    # add aes padding len
+    aes_padding_len = 16 - secret_length % 16
+    
+    if aes_padding_len == 0:
+        aes_padding_len += 16
+    
+    secret_length += aes_padding_len
 
     samplerate, stego_data_revealed = wavfile.read(path)
     try:
@@ -32,7 +42,9 @@ def read_from_file(path, last_bits, cipher_key, seed, secret_length):
     bin_plaintext = decrypt_bin_message(int(cipher_key), revealed_data)
     
     # Convert message to string
-    string_message = bin_list_to_string(bin_plaintext)
+    encrypted_message = bin_list_to_bytes(bin_plaintext)
+
+    string_message = aes.decrypt(encrypted_message, "AES strong key 123 !@#")
     
     print(string_message)
     return string_message
