@@ -4,6 +4,23 @@ def set_LSB(value: str, bits: str) -> str:
     '''Sets given bits on least significant bits'''
     return value[:len(value) - len(bits)] + bits
 
+def set_LSB_int(val: int, bits: str, sign: int) -> int:
+    '''Wrapper to set_LSB that does conversions from int -> string -> int and ensures returned number is in short range.'''
+    bin_val = bin(val)[2:].strip('b')
+    
+    new_bin_val = set_LSB(bin_val, bits)
+    new_val = int(new_bin_val,2)*sign
+
+    if new_val < -32768:
+        val += 1
+        return set_LSB_int(val, bits, sign)
+    
+    if new_val > 32767:
+        val -= 1
+        return set_LSB_int(val, bits, sign)
+
+    return new_val
+
 
 def find_illegal_chars(text) -> list:
     ascii_message = [ord(a) for a in text]
@@ -25,9 +42,9 @@ def hide_data(data, bin_ciphertext, random_locations_key, last_bits, channels):
     for i, (location, bits) in enumerate(zip(random_locations_key, bin_ciphertext_to_enumerate)):
         val = flatten_list[location]
         sign = -1 if val<0 else 1
-        bin_val = bin(val)[2:].strip('b')
-        new_bin_val = set_LSB(bin_val, bits)
-        new_val = int(new_bin_val,2)*sign
+
+        new_val = set_LSB_int(val, bits, sign)
+        
         # print(bin_val,bits,new_bin_val)
         flatten_list[location] = new_val
 
