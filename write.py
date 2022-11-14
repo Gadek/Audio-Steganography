@@ -31,7 +31,7 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
         tk.messagebox.showwarning(title=None, message=message)
         # exit(1)
     
-    padded_secret = aes.encrypt(padded_secret, "AES strong key 123 !@#")
+    padded_secret = aes.encrypt(padded_secret, cipher_key)
 
     # path_src = "C:\\Users\\rados\\Desktop\\udost\\audio-steganography\\sinwave1.wav"
     samplerate, data = wavfile.read(path_src)

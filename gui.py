@@ -101,11 +101,15 @@ def option(args):
 def hide_or_reveal(desition):
     if desition.get()==0: #hide
         message = io_text.get('1.0', 'end')[:-1]
-        write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), int(cryptokey.get()), message, int(seed.get()))
+        cryptokeyStr = cryptokey.get('1.0', 'end')[:-1]
+
+        write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), cryptokeyStr, message, int(seed.get()))
         plot(filename_path_destination, "after")
         secret_length_var.set(len(io_text.get('1.0', 'end'))-1)
     else:
-        message = read_from_file(filename_path_reveal_from, int(LSB.get()), int(cryptokey.get()), int(seed.get()), int(secret_length.get()))
+        cryptokeyStr = cryptokey.get('1.0', 'end')[:-1]
+
+        message = read_from_file(filename_path_reveal_from, int(LSB.get()), cryptokeyStr, int(seed.get()), int(secret_length.get()))
         io_text.delete("1.0", "end")
         io_text.insert(tk.END, message)
 
@@ -181,10 +185,10 @@ R5 = tk.Radiobutton(left_frame, text="5", variable=LSB, value=5)
 R5.pack( anchor = tk.W, pady=(0,10) )
 
 cryptokey_label = tk.Label(left_frame)
-cryptokey_label.config(text="Set cryptographic key from 0 to 6")
+cryptokey_label.config(text="Set AES cryptographic key")
 cryptokey_label.pack( anchor = tk.W )
 
-cryptokey = tk.Spinbox(left_frame, from_=0, to=6)
+cryptokey = tk.Text(left_frame, height = 1, width = 35)
 cryptokey.pack( anchor = tk.W, pady=(0,10) )
 
 seed_label = tk.Label(left_frame)

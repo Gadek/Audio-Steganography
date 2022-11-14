@@ -42,7 +42,7 @@ def read_from_file(path, last_bits, cipher_key, seed, secret_length):
     encrypted_message = bin_list_to_bytes(revealed_data)
 
     # Decrypt message
-    string_message = aes.decrypt(encrypted_message, "AES strong key 123 !@#")
+    string_message = aes.decrypt(encrypted_message, cipher_key)
     
     print(string_message)
     return string_message
