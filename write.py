@@ -24,15 +24,6 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
     padded_secret = secret + bytes(padding, 'utf-8')
     # print(len(padded_secret) % 8)
 
-    # Check if secret message has illegal characters
-    illegal_chars = find_illegal_chars(padded_secret)
-
-    if len(illegal_chars) > 0:
-        message = "Error: Illegal characters: {}".format(", ".join(illegal_chars))
-        print(message, file=sys.stderr)
-        tk.messagebox.showwarning(title=None, message=message)
-        # exit(1)
-
     # path_src = "C:\\Users\\rados\\Desktop\\udost\\audio-steganography\\sinwave1.wav"
     samplerate, data = wavfile.read(path_src)
 
