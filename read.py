@@ -37,13 +37,11 @@ def read_from_file(path, last_bits, cipher_key, seed, secret_length):
     random_locations_key = sorted(random.sample(range(0, frames * channels), int(secret_length * 8 / last_bits)))
 
     revealed_data = reveal_data(stego_data_revealed, random_locations_key, last_bits)
+    
+    # Convert message to bytes
+    encrypted_message = bin_list_to_bytes(revealed_data)
 
     # Decrypt message
-    bin_plaintext = decrypt_bin_message(int(cipher_key), revealed_data)
-    
-    # Convert message to string
-    encrypted_message = bin_list_to_bytes(bin_plaintext)
-
     string_message = aes.decrypt(encrypted_message, "AES strong key 123 !@#")
     
     print(string_message)

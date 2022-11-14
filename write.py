@@ -61,8 +61,7 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
         tk.messagebox.showwarning(title=None, message=message)
         # exit(1)
 
-    bin_message = string_to_bin_list(padded_secret)
-    bin_ciphertext = encrypt_bin_message(cipher_key, bin_message)
+    bin_ciphertext = string_to_bin_list(padded_secret)
     print("bin_ciphertext", bin_ciphertext)
 
     random.seed(seed)
