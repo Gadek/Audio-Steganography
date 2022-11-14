@@ -22,8 +22,11 @@ def set_LSB_int(val: int, bits: str, sign: int) -> int:
     return new_val
 
 
-def find_illegal_chars(text) -> list:
-    ascii_message = [ord(a) for a in text]
+def find_illegal_chars(text: str|bytes) -> list:
+    if isinstance(text, str):
+        text = bytes(text, 'utf-8')
+    
+    ascii_message = [a for a in text]
     illegal_chars = [chr(ascii_char) for ascii_char in ascii_message if len(bin(ascii_char)[2:]) > 8]
     return illegal_chars
 

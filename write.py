@@ -18,8 +18,10 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
     print("secret", secret)
     print()
 
+    secret = aes.encrypt(secret, cipher_key)
+
     padding = gen_padding(len(secret), last_bits)
-    padded_secret = secret + padding
+    padded_secret = secret + bytes(padding, 'utf-8')
     # print(len(padded_secret) % 8)
 
     # Check if secret message has illegal characters
@@ -30,8 +32,6 @@ def write_to_file(path_src, path_dst, last_bits, cipher_key, secret, seed):
         print(message, file=sys.stderr)
         tk.messagebox.showwarning(title=None, message=message)
         # exit(1)
-    
-    padded_secret = aes.encrypt(padded_secret, cipher_key)
 
     # path_src = "C:\\Users\\rados\\Desktop\\udost\\audio-steganography\\sinwave1.wav"
     samplerate, data = wavfile.read(path_src)

@@ -7,11 +7,11 @@ import random
 import aes
 
 def read_from_file(path, last_bits, cipher_key, seed, secret_length):
-    # secret_length might be longer because of padding
-    secret_length += len(gen_padding(secret_length, last_bits))
-
     # add aes padding len
     aes_padding_len = 16 - secret_length % 16
+    
+    # secret_length might be longer because of padding
+    secret_length += len(gen_padding(secret_length, last_bits))
     
     if aes_padding_len == 0:
         aes_padding_len += 16
