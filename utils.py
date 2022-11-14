@@ -40,6 +40,12 @@ def reveal_data(data, random_locations_key, last_bits):
     for i, location in enumerate(random_locations_key):
         val = flatten_list[location]
         string_val_bin = bin(val)[2:].strip('b')
+        
+        if len(string_val_bin) == 1:
+            string_val_bin = '0' + string_val_bin
+        elif len(string_val_bin) == 0:
+            string_val_bin = '00'
+        
         # print("string_val_bin:", string_val_bin)
         output_string += string_val_bin[len(string_val_bin)-last_bits:]
         # print("string_val_bin[len(string_val_bin)-last_bits:]:", string_val_bin[len(string_val_bin)-last_bits:])
