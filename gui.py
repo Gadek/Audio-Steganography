@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog as fd
+# import pyperclip
 from write import write_to_file
 from read import read_from_file
 import scipy.io.wavfile as wavfile
@@ -49,6 +50,36 @@ def plot(path, which):
 def _type(key):
     print(io_text.get('1.0', 'end'))
     print(key)
+
+def show_diff(path_before, path_after):
+    diff_window = tk.Toplevel(window)
+    diff_window.title("New Window")
+
+    # sets the geometry of toplevel
+    diff_window.geometry("600x400")
+
+    fig_diff = Figure(figsize=(7, 3),
+                        dpi=110)
+
+
+    canvas_diff = FigureCanvasTkAgg(fig_diff, master=diff_window)
+    canvas_diff.draw()
+
+    # placing the canvas on the Tkinter window
+    canvas_diff.get_tk_widget().pack()
+
+    # creating the Matplotlib toolbar
+    toolbar_diff = NavigationToolbar2Tk(canvas_diff, diff_window)
+    toolbar_diff.update()
+
+    samplerate_before, y_before = wavfile.read(path_before)
+    samplerate_after, y_after = wavfile.read(path_after)
+    fig_diff.clear()
+    plot_diff = fig_diff.add_subplot(111)
+    y_diff = [a - b for a, b in zip(y_before, y_after)]
+    plot_diff.plot(y_diff)
+    canvas_diff.draw()
+
 
 def option(args):
     io_label.config(text=args)
@@ -106,12 +137,14 @@ def hide_or_reveal(desition):
         write_to_file(filename_path_source, filename_path_destination, int(LSB.get()), cryptokeyStr, message, int(seed.get()))
         plot(filename_path_destination, "after")
         secret_length_var.set(len(io_text.get('1.0', 'end'))-1)
+        show_diff_btn['state'] = tk.NORMAL
     else:
         cryptokeyStr = cryptokey.get('1.0', 'end')[:-1]
 
         message = read_from_file(filename_path_reveal_from, int(LSB.get()), cryptokeyStr, int(seed.get()), int(secret_length.get()))
         io_text.delete("1.0", "end")
         io_text.insert(tk.END, message)
+        # pyperclip.copy(message)
 
 def open_file(arg):
     global filename_path_reveal_from
@@ -164,7 +197,7 @@ length_label = tk.Label(master=left_frame)
 length_label.config(text="Length of message")
 length_label.pack(anchor = tk.W)
 
-io_text = tkscrolled.ScrolledText(master=left_frame, height=12, width=35)
+io_text = tkscrolled.ScrolledText(master=left_frame, height=5, width=35)
 io_text.pack(anchor = tk.W, expand=tk.YES, fill=tk.BOTH, pady=(0, 10))
 io_text.bind("<Button>", lambda event, arg=(0): length_label.config(text=len(io_text.get('1.0', 'end'))-1))
 
@@ -235,6 +268,15 @@ button = tk.Button(
 
 button.pack( anchor = tk.W )
 
+show_diff_btn = tk.Button(
+    master=left_frame,
+    text="show difference",
+    width=15,
+    height=2,
+    command=lambda: show_diff(filename_path_source, filename_path_destination)
+)
+show_diff_btn.pack( anchor = tk.W )
+show_diff_btn['state'] = tk.DISABLED
 
 # plot function is created for
 # plotting the graph in
