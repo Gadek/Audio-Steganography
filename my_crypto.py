@@ -1,4 +1,5 @@
-def string_to_bin_list(text: str|bytes) -> list:
+# def string_to_bin_list(text: str|bytes) -> list: #działa dopiero od python 3.10 w góre
+def string_to_bin_list(text) -> list:
     '''Convert a string to an array of ascii characters in binary format'''
 
     if isinstance(text, str):

@@ -21,7 +21,8 @@ def kdf(key: str) -> bytes:
     
     return kdf.derive(keyBytes)
 
-def pad(message: str|bytes) -> bytes:
+# def pad(message: str|bytes) -> bytes:
+def pad(message) -> bytes:
     if isinstance(message, str):
         message = bytes(message, 'utf-8')
     
@@ -29,7 +30,8 @@ def pad(message: str|bytes) -> bytes:
 
     return padder.update(message) + padder.finalize()
 
-def unpad(padded_data: bytes, returnAsString: bool = False) -> bytes|str:
+# def unpad(padded_data: bytes, returnAsString: bool = False) -> bytes|str:
+def unpad(padded_data: bytes, returnAsString: bool = False):
     unpadder = padding.PKCS7(128).unpadder()
     
     unpadded_data = unpadder.update(padded_data) + unpadder.finalize()
@@ -40,7 +42,9 @@ def unpad(padded_data: bytes, returnAsString: bool = False) -> bytes|str:
     return unpadded_data
 
 
-def encrypt(message: str|bytes, key: str|bytes, returnAsString: bool = False) -> str|bytes:
+# def encrypt(message: str|bytes, key: str|bytes, returnAsString: bool = False) -> str|bytes:
+# def encrypt(message: str|bytes, key: str|bytes, returnAsString: bool = False):
+def encrypt(message, key, returnAsString: bool = False):
     if isinstance(key, str):
         key = kdf(key)
     
@@ -59,7 +63,8 @@ def encrypt(message: str|bytes, key: str|bytes, returnAsString: bool = False) ->
 
     return ct
 
-def decrypt(ct: bytes, key: str|bytes) -> str:
+# def decrypt(ct: bytes, key: str|bytes) -> str:
+def decrypt(ct: bytes, key) -> str:
     if isinstance(key, str):
         key = kdf(key)
 
