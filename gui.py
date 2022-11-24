@@ -76,7 +76,7 @@ def show_diff(path_before, path_after):
     samplerate_after, y_after = wavfile.read(path_after)
     fig_diff.clear()
     plot_diff = fig_diff.add_subplot(111)
-    y_diff = [a - b for a, b in zip(y_before, y_after)]
+    y_diff = [a - b for a, b in zip(y_after, y_before)]
     plot_diff.plot(y_diff)
     canvas_diff.draw()
 
@@ -209,13 +209,8 @@ LSB = tk.IntVar()
 R1 = tk.Radiobutton(left_frame, text="1", variable=LSB, value=1)
 R1.pack( anchor = tk.W )
 R2 = tk.Radiobutton(left_frame, text="2", variable=LSB, value=2)
-R2.pack( anchor = tk.W )
-R3 = tk.Radiobutton(left_frame, text="3", variable=LSB, value=3)
-R3.pack( anchor = tk.W )
-R4 = tk.Radiobutton(left_frame, text="4", variable=LSB, value=4)
-R4.pack( anchor = tk.W )
-R5 = tk.Radiobutton(left_frame, text="5", variable=LSB, value=5)
-R5.pack( anchor = tk.W, pady=(0,10) )
+R2.pack( anchor = tk.W, pady=(0,10) )
+
 
 cryptokey_label = tk.Label(left_frame)
 cryptokey_label.config(text="Set AES cryptographic key")
